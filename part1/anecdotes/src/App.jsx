@@ -7,10 +7,24 @@ const getRandomInt = (min, max) => {
 }
 
 const Display = ({anecdotes, index}) => {
-  console.log(anecdotes[index])
   return (
     <div>
       {anecdotes[index]} 
+    </div>
+  )
+}
+
+const DisplayMax = ({anecdotes, index}) => {
+  let {maxVal, maxIndex} = index
+
+  if (maxVal === 0) {
+    return
+  }
+  return (
+    <div> 
+    <h2>Anecdote with most votes</h2>
+    {anecdotes[maxIndex]}
+    <p>has {maxVal} votes</p>
     </div>
   )
 }
@@ -28,13 +42,30 @@ const App = () => {
   ]
   
   const [random, setRandom] = useState(0)
+  const emptyArr = new Array(anecdotes.length).fill(0)
+  const [votes, setVotes] = useState(emptyArr)
+  const [max, setMax] = useState({maxVal: 0, maxIndex: 0})
 
   const onNext = () => setRandom(getRandomInt(0,anecdotes.length - 1))
+  const onVote = () => {
+    const copy = [... votes]
+    copy[random] += 1
+    setVotes(copy)
+
+    if (copy[random] > max['maxVal']) {
+      setMax({maxVal: copy[random], maxIndex: random})
+    }
+    return
+  }  
 
   return (
     <div> 
+    <h2>Anecdote of the day</h2>
     <Display anecdotes={anecdotes} index={random}/>
+    <p>has {votes[random]} votes</p>
     <Button onClick={onNext} text="next anecdote"/>
+    <Button onClick={onVote} text="vote"/>
+    <DisplayMax anecdotes={anecdotes} index={max}/>
     </div>
   )
 }
