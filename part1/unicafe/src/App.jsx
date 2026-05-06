@@ -28,13 +28,19 @@ const Statistics = ({feedback}) => {
   let positive = good / count
   return (
     <div> 
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-      <p>all {count}</p>
-      <p>average {avg}</p>
-      <p>positive {positive}</p>
+      <StatisticLine text="good" value={good} />
+      <StatisticLine text="neutral" value={neutral} />
+      <StatisticLine text="bad" value={bad} />
+      <StatisticLine text="all" value={count} />
+      <StatisticLine text="average" value={avg} />
+      <StatisticLine text="positive" value={positive} />
     </div>
+  )
+}
+
+const StatisticLine = (statistic) => {
+  return (
+    <p>{statistic.text} {statistic.value}</p>
   )
 }
 
