@@ -8,15 +8,22 @@ const Header = ({title}) => {
   )
 }
 
-const Display = ({props}) => {
-  let good, neutral, bad = props
-  console.log({good})
-  return 
+const Display = ({feedback}) => {
+  // console.log(feedback[feedback.length - 1])
+  if (feedback[feedback.length - 1] === 0) {
+    return (
+      <div>
+        No feedback given
+      </div>
+    )
+  }
+  return (
+    <Statistics feedback={feedback}/>
+  )
 }
 
 const Statistics = ({feedback}) => {
-  let [good, neutral, bad]= feedback
-  let count = good + neutral + bad
+  let [good, neutral, bad, count]= feedback
   let avg = (good*1 + bad*-1) / count
   let positive = good / count
   return (
@@ -39,7 +46,7 @@ const App = () => {
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
-  const statistics = [good, neutral, bad]
+  const statistics = [good, neutral, bad, good + neutral + bad]
 
   const title = 'give feedback'
   const subheader = 'statistics'
@@ -55,7 +62,7 @@ const App = () => {
       <Button onClick={neutralIncrease} text="neutral"/>
       <Button onClick={badIncrease} text="bad"/>
       <Header title={subheader}/>
-      <Statistics feedback={statistics}/>
+      <Display feedback={statistics}/>
     </div>
   )
 }
