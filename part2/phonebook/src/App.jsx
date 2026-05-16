@@ -1,5 +1,74 @@
 import { useState } from 'react'
-import Person from './components/Person'
+
+const Filter = ({
+searchTerm,
+handleSearchTerm
+}) => {
+return(
+  <div>
+    filter shown with
+    <input
+    name="search filter" 
+    type="text"
+    value={searchTerm}
+    onChange={handleSearchTerm}
+    />
+  </div>)
+}
+
+
+const PersonForm = ({
+  onSubmit,
+  newName,
+  handleNameChange,
+  newNumber,
+  handleNumberChange
+}) => (
+  <form onSubmit={onSubmit}>
+    <div>
+      Name: 
+      <input
+      name="user name" 
+      type="text"
+      value={newName}
+      onChange={handleNameChange}
+      />
+    </div>
+    <div>
+      Number: 
+      <input 
+      name="user name" 
+      type="number"
+      value={newNumber}
+      onChange={handleNumberChange}
+      />
+    </div>
+    <div>
+      <button type="submit">add</button>
+    </div>
+  </form>
+)
+
+const Persons = ({persons, searchTerm}) => {
+  
+ const filteredList = (searchTerm === '')
+    ? persons
+    : persons.filter((person) => 
+      person.name.toLowerCase().includes(searchTerm))
+  return(   
+     <dl> 
+      {filteredList.map(person => 
+        <Person key={person.id} person={person} />
+      )}
+    </dl>
+    )
+} 
+
+const Person = ({person}) => {
+  return <dt>{person.name} {person.number}</dt>
+}
+
+
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -34,59 +103,34 @@ const App = () => {
   }
 
   const handleNameChange = (event) => {
-    console.log(event.target.value)
     setNewName(event.target.value)
   }
 
   const handleNumberChange = (event) => {
-    console.log(event.target.value)
     setNewNumber(event.target.value)
   }
 
   const handleSearchTerm = (event) => {
-    console.log(event.target.value)
     setSearchTerm(event.target.value)
   }
-
-  const searchResults = (searchTerm === '')
-    ? persons
-    : persons.filter((person) => 
-      person.name.toLowerCase().includes(searchTerm))
 
   return (
     <div>
       <h2>Phonebook</h2>
-      filter shown with
-      <input 
-      value={searchTerm}
-      onChange={handleSearchTerm}
+      <Filter 
+      searchTerm={searchTerm}
+      handleSearchTerm={handleSearchTerm}
       />
-      <h2>Add a new entry</h2>
-      <form onSubmit={checkName}>
-        <div>
-          Name: 
-          <input 
-          value={newName}
-          onChange={handleNameChange}
-          />
-        </div>
-        <div>
-          Number: 
-          <input 
-          value={newNumber}
-          onChange={handleNumberChange}
-          />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      <dl> 
-        {searchResults.map(person => 
-          <Person key={person.id} person={person} />
-        )}
-      </dl>
+      <h3>Add a new entry</h3>
+      <PersonForm
+      onSubmit={checkName}
+      newName={newName}
+      handleNameChange={handleNameChange}
+      newNumber={newNumber}
+      handleNumberChange={handleNumberChange}
+      />
+      <h3>Numbers</h3>
+      <Persons persons={persons} searchTerm={searchTerm} />
     </div>
   )
 }
