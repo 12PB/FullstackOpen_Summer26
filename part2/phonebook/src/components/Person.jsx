@@ -1,6 +1,5 @@
 const Person = ( {person} ) => {
-  console.log('Person introspect:', person.name)
-  return <dt>{person.name}</dt>
+  return <dt>{person.name} {person.number}</dt>
 }
 
 export default Person
