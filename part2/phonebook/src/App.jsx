@@ -10,6 +10,13 @@ const App = () => {
   ]) 
   const [newName, setNewName] = useState('')
 
+  const checkName = (event) => {
+    const repeated = persons.filter(person => person.name === newName) 
+    return repeated.length === 0
+    ? addName(event) 
+    : alert(`${newName} is already added to phonebook`)
+  }
+  
   const addName = (event) => {
     event.preventDefault()
     console.log('addName introspect:', newName)
@@ -30,7 +37,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <form onSubmit={addName}>
+      <form onSubmit={checkName}>
         <div>
           name: 
           <input 
