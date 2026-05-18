@@ -14,6 +14,17 @@
       "id": "3",
       "content": "GET and POST are the most important methods of HTTP protocol",
       "important": true
+    },
+    {
+      "content": "hahha",
+      "important": true,
+      "id": "_aRxp4A2qio"
+    },
+    {
+      "content": "hoohoo",
+      "important": true,
+      "id": "4LdFYXH6vYY"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }
