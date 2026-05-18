@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import personService from './services/persons'
+import Person from './components/Person'
 
 const Filter = ({
 searchTerm,
@@ -50,27 +51,6 @@ const PersonForm = ({
   </form>
 )
 
-const Persons = ({persons, searchTerm}) => {
-  
- const filteredList = (searchTerm === '')
-    ? persons
-    : persons.filter((person) => 
-      person.name.toLowerCase().includes(searchTerm))
-  return(   
-     <dl> 
-      {filteredList.map(person => 
-        <Person key={person.id} person={person} />
-      )}
-    </dl>
-    )
-} 
-
-const Person = ({person}) => {
-  return <dt>{person.name} {person.number}</dt>
-}
-
-
-
 const App = () => {
   const [persons, setPersons] = useState([])
 
@@ -81,7 +61,6 @@ const App = () => {
         setPersons(initialPersons)
       })
   }, [])
-  console.log('render', persons.length, 'persons')
 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
@@ -101,7 +80,7 @@ const App = () => {
       number: newNumber,
     }
 
-    axios
+    personService
       .create(personObject)
       .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
@@ -122,6 +101,18 @@ const App = () => {
     setSearchTerm(event.target.value)
   }
 
+  const deletePerson = (id) => {
+    event.preventDefault()
+
+    personService
+      .deleteId(id)
+      .then(returnedPersons => {
+        setPersons(persons.filter(person => person.id !== id))
+        console.log(`Deleted ${returnedPersons.name}`)
+      })
+
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -138,7 +129,10 @@ const App = () => {
       handleNumberChange={handleNumberChange}
       />
       <h3>Numbers</h3>
-      <Persons persons={persons} searchTerm={searchTerm} />
+      <Person 
+      persons={persons} 
+      searchTerm={searchTerm}
+      deletePerson={deletePerson} />
     </div>
   )
 }
