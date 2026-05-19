@@ -20,7 +20,7 @@ const Person = ({persons, searchTerm,deletePerson}) => {
         : persons.filter((person) => 
         person.name.toLowerCase().includes(searchTerm))
   return(   
-     <dl> 
+     <dl className='person'> 
       {filteredList.map((person) => 
       <Render 
       key={person.id}

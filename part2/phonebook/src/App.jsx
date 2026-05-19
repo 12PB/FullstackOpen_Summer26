@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import personService from './services/persons'
 import Person from './components/Person'
+import './index.css'
+import Notification from './components/Notification'
 
 const Filter = ({
 searchTerm,
@@ -64,7 +66,16 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
-  
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [errorFlag, setErrorFlag] = useState(false)
+
+  const displayMessage = (message) => {
+    setErrorMessage(message)
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 2000)
+  }
+
   const checkName = (event) => {
     const searchResult = persons.find(person => person.name === newName)
     return searchResult === undefined
@@ -85,6 +96,8 @@ const App = () => {
         setPersons(persons.concat(returnedPerson))
         setNewName('')
         setNewNumber('')
+        setErrorFlag(false)
+        displayMessage(`Added ${returnedPerson.name}`)
       })
   }
 
@@ -99,12 +112,21 @@ const App = () => {
     const personObject = { ...searchResult, number: newNumber,}
 
     personService
-      .update(searchResult.id, personObject)
+      .update(personObject.id, personObject)
       .then(returnedPerson => { 
         setPersons(persons.map(person => person.id === returnedPerson.id ? returnedPerson : person))
         setNewName('')
         setNewNumber('')
+        setErrorFlag(false)
+        displayMessage(`Edited ${returnedPerson.name} number`)
       })
+      .catch(error => {
+        setErrorFlag(true)
+        displayMessage(`Information of ${personObject.name} was already deleted from server`)
+        setPersons(persons.filter(person => person.id !== searchResult.id))
+      }
+      )
+      
   }
 
   const handleNameChange = (event) => {
@@ -126,7 +148,8 @@ const App = () => {
       .deleteId(id)
       .then(returnedPersons => {
         setPersons(persons.filter(person => person.id !== id))
-        console.log(`Deleted ${returnedPersons.name}`)
+        setErrorFlag(false)
+        displayMessage(`Deleted ${returnedPersons.name}`)
       })
 
   }
@@ -134,6 +157,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={errorMessage} error={errorFlag}/>
       <Filter 
       searchTerm={searchTerm}
       handleSearchTerm={handleSearchTerm}
