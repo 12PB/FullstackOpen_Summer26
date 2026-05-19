@@ -40,7 +40,6 @@ const PersonForm = ({
       Number: 
       <input 
       name="user name" 
-      type="number"
       value={newNumber}
       onChange={handleNumberChange}
       />
@@ -67,10 +66,10 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useState('')
   
   const checkName = (event) => {
-    const repeated = persons.filter(person => person.name === newName) 
-    return repeated.length === 0
+    const searchResult = persons.find(person => person.name === newName)
+    return searchResult === undefined
     ? addPerson(event) 
-    : alert(`${newName} is already added to phonebook`)
+    : editCheck(event, searchResult)
   }
   
   const addPerson = (event) => {
@@ -84,6 +83,25 @@ const App = () => {
       .create(personObject)
       .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
+        setNewName('')
+        setNewNumber('')
+      })
+  }
+
+  const editCheck = (event,searchResult) => {
+    event.preventDefault()
+    return (window.confirm(`${searchResult.name} is already added to phonebook, replace the old number with a new one?`))
+      ? editPerson(searchResult)
+      : console.log(`User does not want to edit entry for ${searchResult.name}`)
+  }
+
+  const editPerson = (searchResult) => {
+    const personObject = { ...searchResult, number: newNumber,}
+
+    personService
+      .update(searchResult.id, personObject)
+      .then(returnedPerson => { 
+        setPersons(persons.map(person => person.id === returnedPerson.id ? returnedPerson : person))
         setNewName('')
         setNewNumber('')
       })
