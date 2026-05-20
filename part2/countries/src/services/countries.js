@@ -7,14 +7,4 @@ const getAll = () => {
   return request.then(response => response.data)
 }
 
-const putAll = newObject => {
-    const request = axios.post(customBaseURL, newObject)
-  return request.then(response => response.data)
-}
-
-const retrieveAll = () => {
-  const request = axios.get(customBaseURL)
-  return request.then(response => response.data)
-}
-
-export default { getAll, putAll, retrieveAll}
+export default { getAll}

@@ -24,23 +24,26 @@ const Search = (searchTerm, countries) => {
   ? countries
   : countries.filter((country) => 
     (country.toLowerCase().includes(searchTerm)))
-
 }
 
 const RenderCountry = ({countryName, countries}) => {
-  console.log(countryName, countries)
+  if (!countryName) {
+    return null
+  }
   const targetCountry = countries.find((country) => 
     (country.name.common === countryName))
-  const capital = targetCountry.capital
-  const langArr = Object.values(targetCountry.languages)
-  console.log(targetCountry.flag)
 
+  if (!targetCountry) {
+    return <dt>Loading country data...</dt>
+  }
+  const [capitalCity] = targetCountry.capital
+  const langArr = Object.values(targetCountry.languages)
   return (
     <> 
     <h1>{countryName}</h1>
     <div> 
       <dl>
-        <dt> Capital {capital} </dt>
+        <dt> Capital {capitalCity} </dt>
         <dt> Area {targetCountry.area}</dt>
       </dl>
     </div>
@@ -53,38 +56,40 @@ const RenderCountry = ({countryName, countries}) => {
   )
 }
 
-const Results = ({searchTerm, countryNames, countries}) => {
-  const filteredList = Search(searchTerm, countryNames)
+
+const DisplayCountries = ({displayCountry,filteredList, countries,onClick}) => {
   if (filteredList.length > 10) {
-    return (
-      <dt>Too many matches, specify another filter </dt>
-    )
+    return <dt>Too many matches, specify another filter</dt>
   }
-  if (filteredList.length > 1) {
+
+  if (displayCountry === '') {    
     return (
       <dl>
-        {filteredList.map((country) => <li key={country}>{country}</li>)}
+        {filteredList.map((country) =>
+        (<li key={country}>
+          {country}
+          <button
+          onClick={()=> onClick(country)}>
+            Show
+          </button>
+        </li>))}
       </dl>
-  )}
-  if (filteredList.length === 1) {
-  const [countryName] = filteredList
-  return <RenderCountry countryName={countryName} countries={countries}/>
+    )}
   }
-
-}
-
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [countryNames, setCountryNames] = useState([])
   const [countries, setCountries] = useState([])
+  const [renderCountry, setRenderCountry] = useState('')
+
   
   const handleSearchTerm = (event) => {
     setSearchTerm(event.target.value)
   }
 
-  const changeState = ({countryList}) => {
-    setCountries(countryList)
+  const displayCountry = (country) => {
+    setRenderCountry(country)
   }
 
   useEffect(() => {
@@ -99,15 +104,29 @@ const App = () => {
     })
   }, [])
 
+  const filteredList = Search(searchTerm, countryNames)
+
+  useEffect(() => {
+    if (filteredList.length === 1) {
+      setRenderCountry(filteredList[0])
+    }
+  }, [filteredList])
 
   return (
-    <div>
-        <Filter 
+    <>
+      <Filter 
       searchTerm={searchTerm}
       handleSearchTerm={handleSearchTerm}
       />
-      <Results searchTerm={searchTerm} countryNames={countryNames} countries={countries}/>
-    </div>
+      <DisplayCountries 
+      displayCountry={renderCountry}
+      filteredList={filteredList}
+      countries={countries}
+      onClick={displayCountry}/>
+      <RenderCountry
+      countryName={renderCountry}
+      countries={countries}/>
+    </>
   )
 }
 
