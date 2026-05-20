@@ -86,6 +86,7 @@ const App = () => {
   
   const handleSearchTerm = (event) => {
     setSearchTerm(event.target.value)
+    setRenderCountry('')
   }
 
   const displayCountry = (country) => {
