@@ -12,3 +12,21 @@ content-type: application/json
     "number": "1512412"
 }
 
+###
+POST http://localhost:3001/api/persons/ HTTP/1.1
+content-type: application/json
+
+{
+    "name": "",
+    "number": "1512412"
+}
+
+###
+POST http://localhost:3001/api/persons/ HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Arto",
+    "number": "351241123"
+}
+

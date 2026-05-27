@@ -65,25 +65,32 @@ const generateId = () => {
   return Math.floor(Math.random() * 1000)
 }
 
+
 app.post('/api/persons', (request, response) => {
   const body = request.body
 
-  if (!body.name) {
+  if (!body.name || !body.number) {
     return response.status(400).json({ 
-      error: 'No name entered' 
+      error: 'Not all details entered' 
     })
   }
-
+  
   const person = {
     name: body.name,
     number: body.number,
     id: generateId(),
   }
-  console.log(person)
 
-  persons = persons.concat(person)
+  const repeat = persons.find(person => person.name === body.name)
 
-  response.json(person)
+  if (!repeat) {
+    persons = persons.concat(person)
+    response.json(person)
+    } else {
+        return response.status(400).json({ 
+        error: `Entry for ${person.name} already in phonebook`
+        })
+    }
 })
 
 const PORT = 3001
