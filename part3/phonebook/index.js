@@ -1,7 +1,10 @@
 const express = require('express')
 const app = express()
+const morgan = require('morgan')
+
 
 app.use(express.json())
+app.use(morgan('tiny'))
 
 let persons = [
     { 
@@ -81,7 +84,7 @@ app.post('/api/persons', (request, response) => {
     id: generateId(),
   }
 
-  const repeat = persons.find(person => person.name === body.name)
+  const repeat = persons.find(person => person.name.toLowerCase === body.name.toLowerCase)
 
   if (!repeat) {
     persons = persons.concat(person)
