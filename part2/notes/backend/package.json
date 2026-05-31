@@ -1,10 +1,9 @@
 {
-  "name": "backend",
+  "name": "notes",
   "version": "0.0.1",
   "description": "",
   "license": "MIT",
   "author": "Puneet B",
-  "type": "commonjs",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
