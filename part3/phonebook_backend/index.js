@@ -1,12 +1,14 @@
 const express = require('express')
 const app = express()
 const morgan = require('morgan')
+const cors = require('cors')
 
 morgan.token('content', 
   function (req, res) { 
     return JSON.stringify(req.body)
   })
 
+app.use(cors())
 app.use(express.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content'))
 
@@ -77,7 +79,8 @@ app.post('/api/persons', (request, response) => {
   const body = request.body
 
   if (!body.name || !body.number) {
-    return response.status(400).json({ 
+    console.log('not all details error triggered')
+    return response.status(400).json({
       error: 'Not all details entered' 
     })
   }
@@ -93,11 +96,14 @@ app.post('/api/persons', (request, response) => {
   if (!repeat) {
     persons = persons.concat(person)
     response.json(person)
+    console.log('writing working')
     } else {
+        console.log('repeat error triggered')
         return response.status(400).json({ 
         error: `Entry for ${person.name} already in phonebook`
         })
     }
+
 })
 
 const PORT = 3001
