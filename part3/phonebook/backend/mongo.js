@@ -19,16 +19,6 @@ const noteSchema = new mongoose.Schema({
 const Person = mongoose.model('Person', noteSchema)
 
 
-
-// switch (process.argv.length) {
-//     case 3:
-//         console.log(process.argv.length, "case 3 firing")
-//         break
-//     case 5:
-//         console.log(process.argv.length ,"case 5 firing")
-// }
-
-
 switch (process.argv.length) {
     case 3:
         console.log("phonebook:")

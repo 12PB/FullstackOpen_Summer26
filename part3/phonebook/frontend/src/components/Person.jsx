@@ -5,7 +5,7 @@ const Render = ({person, deletePerson}) => {
     <button 
     onClick={() =>
         (window.confirm(`Delete ${person.name} ?`))
-        ? deletePerson(person.id)
+        ? deletePerson(person.id, person.name)
         : console.log("User does not want to delete entry")
     }>
         delete

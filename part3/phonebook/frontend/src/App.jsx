@@ -141,7 +141,7 @@ const App = () => {
     setSearchTerm(event.target.value)
   }
 
-  const deletePerson = (id) => {
+  const deletePerson = (id, personName) => {
     event.preventDefault()
 
     personService
@@ -149,7 +149,7 @@ const App = () => {
       .then(returnedPersons => {
         setPersons(persons.filter(person => person.id !== id))
         setErrorFlag(false)
-        displayMessage(`Deleted ${returnedPersons.name}`)
+        displayMessage(`Deleted ${personName}`)
       })
 
   }
