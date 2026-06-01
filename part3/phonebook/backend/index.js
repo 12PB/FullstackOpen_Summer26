@@ -14,8 +14,11 @@ const requestLogger = (request, response, next) => {
 app.use(express.static('dist'))
 app.use(express.json())
 
-app.get('/', (request, response) => {
-  response.send('<h1>Hello World, welcome to phonebook!</h1>')
+app.get('/info', (request, response) => {
+  Person.find({}).then(persons => {
+    message = `Phonebook contains information about ${persons.length} people`
+    response.json(message)
+  })
 })
 
 app.get('/api/persons', (request, response) => {
@@ -59,6 +62,24 @@ app.delete('/api/persons/:id', (request, response) => {
 
 })
 
+app.put('/api/persons/:id', (request, response, next) => {
+  const { name, number } = request.body
+
+  Person.findById(request.params.id)
+    .then(person => {
+      if (!person) {
+        return response.status(404).end()
+      }
+
+      person.name = name
+      person.number = number
+
+      return person.save().then((updatedPerson) => {
+        response.json(updatedPerson)
+      })
+    })
+    .catch(error => next(error))
+})
   // const repeat = persons.find(person => person.name.toLowerCase === body.name.toLowerCase)
 
   // if (!repeat) {

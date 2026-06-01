@@ -9,3 +9,11 @@ Content-Type: application/json
 ###
 DELETE  http://localhost:3001/api/persons/6a1d9ebcde2486f1077f302b
 
+###
+PUT http://localhost:3001/api/persons/6a1da14c49660d2bb08e503e
+Content-Type: application/json
+
+{
+    "name": "tester",
+    "number": "750"
+}
