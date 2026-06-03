@@ -99,6 +99,10 @@ const App = () => {
         setErrorFlag(false)
         displayMessage(`Added ${returnedPerson.name}`)
       })
+      .catch(error => {
+        setErrorFlag(true)
+        displayMessage(error.response.data.error)
+      })
   }
 
   const editCheck = (event,searchResult) => {
