@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import personService from './services/persons'
 import Person from './components/Person'
 import './index.css'
@@ -124,7 +123,7 @@ const App = () => {
         setErrorFlag(false)
         displayMessage(`Edited ${returnedPerson.name} number`)
       })
-      .catch(error => {
+      .catch(() => {
         setErrorFlag(true)
         displayMessage(`Information of ${personObject.name} was already deleted from server`)
         setPersons(persons.filter(person => person.id !== searchResult.id))
@@ -150,7 +149,7 @@ const App = () => {
 
     personService
       .deleteId(id)
-      .then(returnedPersons => {
+      .then(() => {
         setPersons(persons.filter(person => person.id !== id))
         setErrorFlag(false)
         displayMessage(`Deleted ${personName}`)

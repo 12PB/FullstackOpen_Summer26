@@ -3,20 +3,12 @@ const express = require('express')
 const Person = require('./models/person')
 const app = express()
 
-const requestLogger = (request, response, next) => {
-  console.log('Method:', request.method)
-  console.log('Path:  ', request.path)
-  console.log('Body:  ', request.body)
-  console.log('---')
-  next()
-}
-
 app.use(express.static('dist'))
 app.use(express.json())
 
 app.get('/info', (request, response) => {
   Person.find({}).then(persons => {
-    message = `Phonebook contains information about ${persons.length} people`
+    const message = `Phonebook contains information about ${persons.length} people`
     response.json(message)
   })
 })
@@ -38,8 +30,8 @@ app.post('/api/persons', (request, response, next) => {
   const body = request.body
 
   if (!body.name) {
-    return response.status(400).json({ 
-      error: 'content missing' 
+    return response.status(400).json({
+      error: 'content missing'
     })
   }
 
@@ -50,13 +42,12 @@ app.post('/api/persons', (request, response, next) => {
 
   person.save().then(savedPerson => {
     response.json(savedPerson)
-  })
-  .catch(error => next(error))
+  }).catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
@@ -81,20 +72,8 @@ app.put('/api/persons/:id', (request, response, next) => {
     })
     .catch(error => next(error))
 })
-  // const repeat = persons.find(person => person.name.toLowerCase === body.name.toLowerCase)
 
-  // if (!repeat) {
-  //   persons = persons.concat(person)
-  //   response.json(person)
-  //   console.log('writing working')
-  //   } else {
-  //       console.log('repeat error triggered')
-  //       return response.status(400).json({ 
-  //       error: `Entry for ${person.name} already in phonebook`
-  //       })
-  //   }
-
-const unknownEndpoint = (request, response, next) => {
+const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
 
@@ -115,5 +94,5 @@ app.use(errorHandler)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`)
 })

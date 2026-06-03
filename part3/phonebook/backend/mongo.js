@@ -20,24 +20,26 @@ const Person = mongoose.model('Person', noteSchema)
 
 
 switch (process.argv.length) {
-    case 3:
-        console.log("phonebook:")
-        Person.find({}).then(result => {
-            result.forEach(person => {
-                console.log(person.name," ",person.number);
-            })
-            mongoose.connection.close()
-        })
-        break
-    case 5:
-        const person = new Person({
-            name: process.argv.at(-2),
-            number: process.argv.at(-1)
-        })
+  case 3:{
+    console.log('phonebook:')
+    Person.find({}).then(result => {
+      result.forEach(person => {
+        console.log(person.name,' ',person.number)
+      })
+      mongoose.connection.close()
+    })
+    break
+  }
+  case 5:{
+    let person = new Person({
+      name: process.argv.at(-2),
+      number: process.argv.at(-1)
+    })
 
-        person.save().then(result => {
-            console.log(`added ${person.name} ${person.number} added to phonebook!`);
-            mongoose.connection.close()
-        })
-        break
+    person.save().then(() => {
+      console.log(`added ${person.name} ${person.number} added to phonebook!`)
+      mongoose.connection.close()
+    })
+    break
+  }
 }
