@@ -1,0 +1,20 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title": "Initial testing",
+    "author": "John Deez",
+    "url": "firstissue",
+    "likes": 2
+}
+
+###
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title": "Second testing",
+    "author": "Deez John",
+    "url": "secoondissue",
+    "likes": 5
+}
