@@ -53,6 +53,24 @@ test('a valid blog can be added', async () => {
   assert(contents.includes('async/await simplifies making async calls'))
 })
 
+test('check if likes property exists', async () => {
+  const newBlog = {
+    title: 'async/await simplifies making async calls',
+    author: 'Test Author',
+    url: 'testAddition',
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const blogs = await api.get('/api/blogs')
+  const createdBlog = blogs.body.find(blog => blog.title === 'async/await simplifies making async calls')
+  assert.equal(createdBlog.likes, 0)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
