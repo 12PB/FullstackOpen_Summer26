@@ -10,6 +10,5 @@ Content-Type: application/json
 {
     "title": "Third testing",
     "author": "Deez John",
-    "url": "thirdissue",
-    "likes": 20
+    "url": "thirdissue"
 }
