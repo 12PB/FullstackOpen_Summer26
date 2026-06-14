@@ -32,6 +32,27 @@ test('unique identifier of blogposts is id', async () => {
   assert('id' in blogs.body[0])
 })
 
+test('a valid blog can be added', async () => {
+  const newBlog = {
+    title: 'async/await simplifies making async calls',
+    author: 'Test Author',
+    url: 'testAddition',
+    likes: 5,
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsAtEnd = await testHelper.blogsInDb()
+  assert.strictEqual(blogsAtEnd.length, testHelper.blogList.length + 1)
+
+  const contents = blogsAtEnd.map(n => n.title)
+  assert(contents.includes('async/await simplifies making async calls'))
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
