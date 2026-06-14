@@ -1,12 +1,7 @@
-POST http://localhost:3003/api/blogs
+GET  http://localhost:3001/api/blogs
 Content-Type: application/json
 
-{
-    "title": "Initial testing",
-    "author": "John Deez",
-    "url": "firstissue",
-    "likes": 2
-}
+{}
 
 ###
 POST http://localhost:3003/api/blogs
