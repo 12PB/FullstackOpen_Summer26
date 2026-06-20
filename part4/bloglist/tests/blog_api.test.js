@@ -108,6 +108,19 @@ describe('a new valid blog', () => {
       .delete(`/api/blogs/${deleteId}`)
       .expect(204)
   })
+
+  test.only('can update likes', async () => {
+    const response = await api.get('/api/blogs')
+    const updateBlog =  {
+      'likes': 5,
+      'id': response.body[0].id
+    }
+
+    await api
+      .put(`/api/blogs/${updateBlog.id}`)
+      .send(updateBlog)
+      .expect(200)
+  })
 })
 
 after(async () => {
