@@ -100,6 +100,14 @@ describe('a new valid blog', () => {
       .expect(400)
       .expect('Content-Type', /application\/json/)
   })
+
+  test('can be deleted', async () => {
+    const response = await api.get('/api/blogs')
+    const deleteId = response.body[0].id
+    await api
+      .delete(`/api/blogs/${deleteId}`)
+      .expect(204)
+  })
 })
 
 after(async () => {

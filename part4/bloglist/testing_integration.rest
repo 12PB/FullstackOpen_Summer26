@@ -8,7 +8,13 @@ POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
-    "title": "Third testing",
+    "title": "testing deletion",
     "author": "Deez John",
     "url": "thirdissue"
 }
+
+###
+DELETE  http://localhost:3001/api/blogs/6a3651a599233f6926ed5b1c
+Content-Type: application/json
+
+{}
