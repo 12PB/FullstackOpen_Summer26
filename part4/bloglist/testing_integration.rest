@@ -47,3 +47,13 @@ Content-Type: application/json
     "name": "Hallo",
     "password": "salainen"
 }
+
+###
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+    "title": "Testing author display",
+    "author": "Deez John",
+    "url": "issue"
+}
