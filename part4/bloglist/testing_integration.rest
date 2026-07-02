@@ -62,8 +62,24 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNlY
 ### 
 POST http://localhost:3001/api/login
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImZpcnN0VXNlciIsImlkIjoiNmE0MzQ4MGViYTNmMzhiZTAwZmY4N2ExIiwiaWF0IjoxNzgyOTc5MzI5fQ.ml1u0u1TRXVM6SGknwGPo3XK0oDsz_j4i55tGqcQe10
+{
+    "username": "firstUser",
+    "password": "salainen"
+}
+
+### 
+POST http://localhost:3001/api/login
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNlY29uZCIsImlkIjoiNmE0MzdlYmVlOTU4YTFkNDg2YjViOGNkIiwiaWF0IjoxNzgyOTc5MzgxfQ.H0L6eRMWTKhDnqYdwjSfDOhxTLNQrhyLub6BD9C87KY
 
 {
     "username": "second",
     "password": "salainen"
 }
+
+###
+DELETE  http://localhost:3001/api/blogs/6a45e5fa626f66c4ec0d46d4
+Content-Type: application/json
+
+{}
