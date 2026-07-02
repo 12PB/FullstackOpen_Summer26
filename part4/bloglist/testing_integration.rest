@@ -51,7 +51,7 @@ Content-Type: application/json
 ###
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbbmFtZSI6ImZpcnN0VXNlciIsImlkIjoiNmE0MzQ4MGViYTNmMzhiZTAwZmY4N2ExIiwiaWF0IjoxNzgyOTYzODA2fQ.bccTKKcH1orSUO2eNToy_Oa-U5pTNbSstTmR5Hv7_70
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNlY29uZCIsImlkIjoiNmE0MzdlYmVlOTU4YTFkNDg2YjViOGNkIiwiaWF0IjoxNzgyOTY0NjcxfQ.SXMUsC506jHPgrT3iHo8_6CN06BJf1aaNJDXKU-8wMs
 
 {
     "title": "Testing author display",
