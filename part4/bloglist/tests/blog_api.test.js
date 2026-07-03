@@ -22,6 +22,7 @@ describe('all blogs', () => {
     assert.strictEqual(response.body.length, testHelper.blogList.length)
   })
 
+
   test(' are returned as json', async () => {
     await api
       .get('/api/blogs')
@@ -36,6 +37,25 @@ describe('all blogs', () => {
 })
 
 describe('a new valid blog', () => {
+  let userToken
+
+  beforeEach(async () => {
+    await User.deleteMany({})
+
+    const passwordHash = await bcrypt.hash('sekret', 10)
+    const user = new User({ username: 'root', passwordHash })
+
+    await user.save()
+
+    const response = await api
+      .post('/api/login')
+      .send({ username: 'root', password: 'sekret' })
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    userToken = response.body.token
+  })
+
   test('can be added', async () => {
     const newBlog = {
       title: 'async/await simplifies making async calls',
@@ -47,6 +67,7 @@ describe('a new valid blog', () => {
     await api
       .post('/api/blogs')
       .send(newBlog)
+      .set('Authorization' ,`Bearer ${userToken}`)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -55,6 +76,22 @@ describe('a new valid blog', () => {
 
     const contents = blogsAtEnd.map(n => n.title)
     assert(contents.includes('async/await simplifies making async calls'))
+  })
+
+  test.only('cannot be added without a valid token', async () => {
+    const newBlog = {
+      title: 'async/await simplifies making async calls',
+      author: 'Test Author',
+      url: 'testAddition',
+      likes: 5,
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .set('Authorization' ,'Bearer 12432')
+      .expect(401)
+      .expect('Content-Type', /application\/json/)
   })
 
   test('autofills missing likes property', async () => {
@@ -67,6 +104,7 @@ describe('a new valid blog', () => {
     await api
       .post('/api/blogs')
       .send(newBlog)
+      .set('Authorization' ,`Bearer ${userToken}`)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -85,6 +123,7 @@ describe('a new valid blog', () => {
     await api
       .post('/api/blogs')
       .send(newBlog)
+      .set('Authorization' ,`Bearer ${userToken}`)
       .expect(400)
       .expect('Content-Type', /application\/json/)
   })
@@ -99,19 +138,35 @@ describe('a new valid blog', () => {
     await api
       .post('/api/blogs')
       .send(newBlog)
+      .set('Authorization' ,`Bearer ${userToken}`)
       .expect(400)
       .expect('Content-Type', /application\/json/)
   })
 
   test('can be deleted', async () => {
-    const response = await api.get('/api/blogs')
-    const deleteId = response.body[0].id
+
+    const newBlog = {
+      title: 'Blogs can be deleted',
+      author: 'Test Author',
+      url: 'testAddition',
+      likes: 5,
+    }
+
+    const response = await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .set('Authorization' ,`Bearer ${userToken}`)
+      .expect(201)
+
+    const deleteId = response.body.id
+
     await api
       .delete(`/api/blogs/${deleteId}`)
+      .set('Authorization' ,`Bearer ${userToken}`)
       .expect(204)
   })
 
-  test.only('can update likes', async () => {
+  test('can update likes', async () => {
     const response = await api.get('/api/blogs')
     const updateBlog =  {
       'likes': 5,
@@ -125,7 +180,7 @@ describe('a new valid blog', () => {
   })
 })
 
-describe('when there is initially one user in db', () => {
+describe('when there is initially one user in db, new user', () => {
   beforeEach(async () => {
     await User.deleteMany({})
 
