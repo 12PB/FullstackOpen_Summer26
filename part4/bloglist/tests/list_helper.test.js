@@ -17,7 +17,7 @@ describe('total likes', () => {
 
 describe('most likes', () => {
   test('when list has only one blog, produces the blog', () => {
-    const result = listHelper.mostLikes(testHelper.listWithOneBlog)
+    const result = listHelper.favoriteBlog(testHelper.listWithOneBlog)
     assert.deepStrictEqual(result,   {
       _id: '5a422aa71b54a676234d17f8',
       title: 'Go To Statement Considered Harmful',
@@ -27,7 +27,7 @@ describe('most likes', () => {
       __v: 0
     })  })
   test('when list has only many blogs,produces the blog with most likes', () => {
-    const result = listHelper.mostLikes(testHelper.blogList)
+    const result = listHelper.favoriteBlog(testHelper.blogList)
     assert.deepStrictEqual(result,
       {
         _id: '5a422b3a1b54a676234d17f9',
@@ -38,7 +38,7 @@ describe('most likes', () => {
         __v: 0
       },)  })
   test('when list has multiple blogs with same votes,produces the first blog', () => {
-    const result = listHelper.mostLikes(testHelper.listWithMultipleBlogs)
+    const result = listHelper.favoriteBlog(testHelper.listWithMultipleBlogs)
     assert.deepStrictEqual(result,
       {
         _id: '5a422a851b54a676234d17f7',
@@ -48,4 +48,18 @@ describe('most likes', () => {
         likes: 10,
         __v: 0
       },)  })
+
+})
+
+describe('mostBlogs', () => {
+  test('of empty list is zero', () => {
+    assert.deepStrictEqual(listHelper.mostBlogs(testHelper.emptyBlog), {})
+  })
+  test('when list has only one blog, shows author of blog', () => {
+    const result = listHelper.mostBlogs(testHelper.listWithOneBlog)
+    assert.deepStrictEqual(result, { author: 'Edsger W. Dijkstra', blogs: 1 })  })
+
+  test('when list has only many blogs, returns author with most blogs', () => {
+    const result = listHelper.mostBlogs(testHelper.blogList)
+    assert.deepStrictEqual(result, { author: 'Robert C. Martin', blogs: 3 })  })
 })
